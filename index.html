@@ -497,6 +497,896 @@
   }
  
   .intention-sub {
+    font-size: 1.1rem;
+    color: rgba(250,244,232,0.55);
+    margin-bottom: 2rem;
+    line-height: 1.6;
+    font-style: italic;
+  }
+ 
+  .intention-input {
+    width: 100%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(212,168,67,0.25);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    color: var(--warm-cream);
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    resize: none;
+    outline: none;
+    transition: border-color 0.3s ease;
+    min-height: 100px;
+  }
+ 
+  .intention-input::placeholder { color: rgba(250,244,232,0.3); }
+  .intention-input:focus { border-color: rgba(212,168,67,0.6); }
+ 
+  .intention-confirm {
+    margin-top: 1.5rem;
+    display: inline-block;
+    padding: 0.85rem 2.2rem;
+    border: 1px solid var(--gold);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--gold);
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s ease;
+  }
+ 
+  .intention-confirm::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+    z-index: -1;
+  }
+ 
+  .intention-confirm:hover { color: var(--deep-earth); }
+  .intention-confirm:hover::before { transform: scaleX(1); }
+
+  /* Affirmed screen */
+  .intention-affirmed { display: none; }
+
+  .intention-affirmed-text {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-style: italic;
+    color: var(--gold);
+    margin-bottom: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .intention-affirmed-sub {
+    font-size: 1rem;
+    color: rgba(250,244,232,0.5);
+    margin-top: 0.75rem;
+    margin-bottom: 2rem;
+  }
+
+  /* Share / Keep buttons */
+  .share-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.85rem;
+    margin-top: 1.75rem;
+  }
+
+  .btn-share {
+    display: inline-block;
+    padding: 0.85rem 2.2rem;
+    border: 1px solid var(--gold);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--gold);
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.05rem;
+    letter-spacing: 0.1em;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s ease;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .btn-share::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+    z-index: -1;
+  }
+
+  .btn-share:hover { color: var(--deep-earth); }
+  .btn-share:hover::before { transform: scaleX(1); }
+
+  .btn-keep {
+    background: none;
+    border: none;
+    color: rgba(250,244,232,0.35);
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.95rem;
+    letter-spacing: 0.05em;
+    cursor: pointer;
+    transition: color 0.2s ease;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .btn-keep:hover { color: rgba(250,244,232,0.65); }
+
+  .copied-note {
+    display: none;
+    font-size: 0.9rem;
+    color: var(--sage);
+    letter-spacing: 0.05em;
+    animation: fadeUp 0.4s ease forwards;
+  }
+ 
+  .footer-note {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid rgba(212,168,67,0.1);
+    font-size: 0.85rem;
+    color: rgba(250,244,232,0.3);
+    letter-spacing: 0.05em;
+  }
+ 
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
+    opacity: 0.025;
+    pointer-events: none;
+    z-index: 9000;
+  }
+</style>
+</head>
+<body>
+ 
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+ 
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="orb" style="width:200px;height:200px;background:rgba(122,158,126,0.3);left:10%;animation-duration:18s;animation-delay:-5s;"></div>
+  <div class="orb" style="width:150px;height:150px;background:rgba(139,184,212,0.25);left:70%;animation-duration:22s;animation-delay:-10s;"></div>
+  <div class="orb" style="width:100px;height:100px;background:rgba(212,132,154,0.2);left:40%;animation-duration:15s;animation-delay:-2s;"></div>
+  <div class="orb" style="width:120px;height:120px;background:rgba(212,168,67,0.2);left:85%;animation-duration:20s;animation-delay:-8s;"></div>
+  <div class="hero-content">
+    <p class="eyebrow">A vision for our time</p>
+    <h1 class="hero-title">The world we're<br><em>already becoming</em></h1>
+    <p class="hero-sub">Imagine every person alive living from their gifts, loving freely, building what matters. This isn't a distant dream. It begins here, with how we treat each other today.</p>
+    <div class="scroll-hint">
+      <span>Scroll to explore</span>
+      <div class="scroll-line"></div>
+    </div>
+  </div>
+</section>
+ 
+<div class="divider">
+  <p class="divider-text">Seven pillars of a thriving world</p>
+</div>
+ 
+<section class="cards-section">
+  <div class="cards-grid" id="cardsGrid"></div>
+</section>
+ 
+<section class="quote-section">
+  <span class="quote-mark">"</span>
+  <p class="quote-text">When one person lives from love instead of fear, they give permission to everyone around them to do the same. That's how worlds change one human at a time.</p>
+  <p class="quote-source">— The wisdom we're remembering</p>
+</section>
+ 
+<section class="vision-section">
+  <h2 class="vision-title">One act of love ripples outward</h2>
+  <p class="vision-sub">Your kindness travels further than you'll ever know</p>
+  <div class="ripple-canvas" id="rippleCanvas">
+    <div class="ripple-ring" style="animation-delay: 0s;"></div>
+    <div class="ripple-ring" style="animation-delay: 1.3s;"></div>
+    <div class="ripple-ring" style="animation-delay: 2.6s;"></div>
+    <div class="ripple-orbit" style="--r:160px;--speed:12s;">
+      <div class="orbit-node" style="--node-color:var(--sage);">🌿</div>
+    </div>
+    <div class="ripple-orbit" style="--r:220px;--speed:18s;animation-direction:reverse;">
+      <div class="orbit-node" style="--node-color:var(--sky);">🤝</div>
+    </div>
+    <div class="ripple-orbit" style="--r:290px;--speed:25s;">
+      <div class="orbit-node" style="--node-color:var(--rose);">🎨</div>
+    </div>
+    <div class="ripple-core">💛</div>
+  </div>
+</section>
+ 
+<section class="cta-section">
+  <h2 class="cta-title">You are the <em>world</em><br>you're building</h2>
+  <p class="cta-body">Every business built with care. Every art made with love. Every community nurtured. Every child seen. These are not small things they are the thing.</p>
+  <a href="#" class="cta-btn" id="openIntention" onclick="return false;">I'm ready to build it ✦</a>
+</section>
+ 
+<p class="footer-note">Made with love · For the world that's waking up · Every soul matters</p>
+ 
+<!-- Intention Modal -->
+<div class="intention-overlay" id="intentionOverlay">
+  <div class="intention-modal">
+    <button class="intention-close" id="closeModal">✕</button>
+
+    <!-- Step 1: Write intention -->
+    <div id="intentionForm">
+      <p class="intention-eyebrow">Set your intention</p>
+      <h2 class="intention-heading">What world are <em style="font-style:italic;color:var(--gold);">you</em> building?</h2>
+      <p class="intention-sub">Speak it into being. Even one sentence is enough — the universe listens when we're honest about what we want to create.</p>
+      <textarea class="intention-input" id="intentionText" placeholder="I am building a world where…" rows="4"></textarea>
+      <br>
+      <button class="intention-confirm" id="confirmIntention">I confirm this ✦</button>
+    </div>
+
+    <!-- Step 2: Affirmed + share choice -->
+    <div class="intention-affirmed" id="intentionAffirmed">
+      <div style="font-size:2.5rem;margin-bottom:1rem;">✨</div>
+      <p class="intention-affirmed-text" id="affirmationEcho"></p>
+      <p class="intention-affirmed-sub">Your intention is alive. Go live it.</p>
+      <div class="share-actions">
+        <button class="btn-share" id="btnShare">Share my intention 🌍</button>
+        <div class="copied-note" id="copiedNote">Copied to clipboard — go spread the word 💛</div>
+        <button class="btn-keep" id="btnKeep">Keep it to myself</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+ 
+<script>
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursorRing');
+  let mx = 0, my = 0, rx = 0, ry = 0;
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cursor.style.left = mx + 'px';
+    cursor.style.top = my + 'px';
+  });
+  function animRing() {
+    rx += (mx - rx) * 0.12;
+    ry += (my - ry) * 0.12;
+    ring.style.left = rx + 'px';
+    ring.style.top = ry + 'px';
+    requestAnimationFrame(animRing);
+  }
+  animRing();
+ 
+  document.addEventListener('mousemove', e => {
+    document.querySelectorAll('.world-card').forEach(card => {
+      const rect = card.getBoundingClientRect();
+      card.style.setProperty('--mx', ((e.clientX - rect.left) / rect.width * 100) + '%');
+      card.style.setProperty('--my', ((e.clientY - rect.top) / rect.height * 100) + '%');
+    });
+  });
+ 
+  const cards = [
+    { icon: '🎨', title: 'Art as Daily Life', desc: 'Humans creating freely, music humming from windows, murals breathing on walls, stories told around fires. Creativity not as hobby but as birthright.', color: 'var(--rose)' },
+    { icon: '🌱', title: 'Business with Soul', desc: 'Enterprises that ask: does this nourish? Work becomes vocation, people doing what they love, traveling, trading real value, building communities not just revenue.', color: 'var(--sage)' },
+    { icon: '👨‍👩‍👧', title: 'Family as Foundation', desc: 'Time is the currency of love. Families who are present. Elders honored. Children raised by whole villages, every child belonging to someone.', color: 'var(--terracotta)' },
+    { icon: '🤝', title: 'Neighbors Who Know', desc: 'Communities where people barter, share surplus, and look after one another. Where you know your neighbors\' names and they know yours.', color: 'var(--sky)' },
+    { icon: '✨', title: 'Living Your Gift', desc: 'A world where nobody suppresses what they were made for. The healer heals. The builder builds. The dreamer dreams and is fed for it.', color: 'var(--gold)' },
+    { icon: '🕊️', title: 'Safety as Baseline', desc: 'Children who grow up without fear. Adults who can be vulnerable. Streets where you walk at night and feel held, not threatened.', color: 'var(--lavender)' },
+  ];
+ 
+  const grid = document.getElementById('cardsGrid');
+  cards.forEach((c, i) => {
+    const el = document.createElement('div');
+    el.className = 'world-card';
+    el.innerHTML = `
+      <span class="card-icon" style="animation-delay:${i * 0.5}s">${c.icon}</span>
+      <h3 class="card-title">${c.title}</h3>
+      <p class="card-desc">${c.desc}</p>
+      <div class="card-accent" style="background:${c.color}"></div>
+    `;
+    grid.appendChild(el);
+  });
+ 
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.style.opacity = '1';
+        e.target.style.transform = 'translateY(0)';
+      }
+    });
+  }, { threshold: 0.1 });
+ 
+  document.querySelectorAll('.world-card').forEach((card, i) => {
+    card.style.opacity = '0';
+    card.style.transform = 'translateY(40px)';
+    card.style.transition = `opacity 0.7s ease ${i * 0.1}s, transform 0.7s ease ${i * 0.1}s, border-color 0.4s ease, background 0.4s ease`;
+    observer.observe(card);
+  });
+ 
+  // Modal logic
+  const overlay = document.getElementById('intentionOverlay');
+  let currentIntention = '';
+
+  function resetModal() {
+    document.getElementById('intentionForm').style.display = 'block';
+    document.getElementById('intentionAffirmed').style.display = 'none';
+    document.getElementById('copiedNote').style.display = 'none';
+    document.getElementById('intentionText').value = '';
+    currentIntention = '';
+  }
+
+  document.getElementById('openIntention').addEventListener('click', () => overlay.classList.add('open'));
+
+  document.getElementById('closeModal').addEventListener('click', () => {
+    overlay.classList.remove('open');
+    resetModal();
+  });
+
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) {
+      overlay.classList.remove('open');
+      resetModal();
+    }
+  });
+ 
+  document.getElementById('confirmIntention').addEventListener('click', () => {
+    const text = document.getElementById('intentionText').value.trim();
+    currentIntention = text || 'I am building a world of love, beauty, and belonging.';
+    document.getElementById('affirmationEcho').textContent = '"' + currentIntention + '"';
+    document.getElementById('intentionForm').style.display = 'none';
+    const affirmed = document.getElementById('intentionAffirmed');
+    affirmed.style.display = 'block';
+    affirmed.style.opacity = '0';
+    affirmed.style.transform = 'translateY(20px)';
+    setTimeout(() => {
+      affirmed.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+      affirmed.style.opacity = '1';
+      affirmed.style.transform = 'translateY(0)';
+    }, 10);
+  });
+
+  // Share — copies a ready-to-paste message to clipboard
+  document.getElementById('btnShare').addEventListener('click', () => {
+    const shareText = `✨ My intention:\n\n"${currentIntention}"\n\nWhat world are you building? Set your intention → ${window.location.href}`;
+    const copy = (text) => {
+      if (navigator.clipboard) {
+        return navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;opacity:0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
+        return Promise.resolve();
+      }
+    };
+    copy(shareText).then(() => {
+      document.getElementById('copiedNote').style.display = 'block';
+    });
+  });
+
+  // Keep to myself — close quietly
+  document.getElementById('btnKeep').addEventListener('click', () => {
+    overlay.classList.remove('open');
+    resetModal();
+  });
+</script>
+</body>
+</html>
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A World We're Building Together</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Crimson+Pro:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #D4A843;
+    --warm-cream: #FAF4E8;
+    --deep-earth: #060f27;
+    --sage: #7A9E7E;
+    --terracotta: #C4714A;
+    --sky: #8BB8D4;
+    --rose: #D4849A;
+    --lavender: #A89BC4;
+  }
+ 
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+ 
+  body {
+    background: var(--deep-earth);
+    color: var(--warm-cream);
+    font-family: 'Crimson Pro', serif;
+    overflow-x: hidden;
+    cursor: none;
+  }
+ 
+  .cursor {
+    position: fixed;
+    width: 12px;
+    height: 12px;
+    background: var(--gold);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.1s ease, width 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+    mix-blend-mode: screen;
+  }
+  .cursor-ring {
+    position: fixed;
+    width: 40px;
+    height: 40px;
+    border: 1px solid rgba(212,168,67,0.4);
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 9998;
+    transform: translate(-50%, -50%);
+    transition: transform 0.15s ease;
+  }
+ 
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    padding: 2rem;
+  }
+ 
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 30%, rgba(122,158,126,0.15) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 70%, rgba(139,184,212,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, rgba(212,168,67,0.05) 0%, transparent 70%);
+    animation: breathe 8s ease-in-out infinite;
+  }
+ 
+  @keyframes breathe {
+    0%, 100% { opacity: 0.7; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.02); }
+  }
+ 
+  .orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(60px);
+    animation: float linear infinite;
+    pointer-events: none;
+  }
+ 
+  @keyframes float {
+    0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 1; }
+    90% { opacity: 0.6; }
+    100% { transform: translateY(-20vh) rotate(360deg); opacity: 0; }
+  }
+ 
+  .hero-content {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    max-width: 800px;
+  }
+ 
+  .eyebrow {
+    font-size: 0.85rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.3s forwards;
+    margin-bottom: 1.5rem;
+  }
+ 
+  .hero-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 6.5rem);
+    line-height: 1.05;
+    color: var(--warm-cream);
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.6s forwards;
+    margin-bottom: 1.5rem;
+  }
+ 
+  .hero-title em { font-style: italic; color: var(--gold); }
+ 
+  .hero-sub {
+    font-size: clamp(1.1rem, 2.5vw, 1.4rem);
+    font-weight: 300;
+    line-height: 1.7;
+    color: rgba(250,244,232,0.75);
+    opacity: 0;
+    animation: fadeUp 1.2s ease 0.9s forwards;
+    max-width: 560px;
+    margin: 0 auto 3rem;
+  }
+ 
+  .scroll-hint {
+    opacity: 0;
+    animation: fadeUp 1.2s ease 1.4s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    color: rgba(250,244,232,0.4);
+    font-size: 0.8rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+ 
+  .scroll-line {
+    width: 1px;
+    height: 50px;
+    background: linear-gradient(to bottom, transparent, var(--gold));
+    animation: scrollPulse 2s ease infinite;
+  }
+ 
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.3; transform: scaleY(0.8); }
+    50% { opacity: 1; transform: scaleY(1); }
+  }
+ 
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+ 
+  .divider {
+    text-align: center;
+    padding: 3rem 2rem 1rem;
+    position: relative;
+  }
+  .divider::before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 1px;
+    background: var(--gold);
+    margin: 0 auto 2rem;
+    opacity: 0.5;
+  }
+  .divider-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    font-style: italic;
+    color: var(--warm-cream);
+    opacity: 0.9;
+  }
+ 
+  .cards-section {
+    padding: 4rem 2rem 6rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+ 
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+ 
+  .world-card {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(212,168,67,0.15);
+    border-radius: 16px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.4s ease, border-color 0.4s ease, background 0.4s ease;
+    cursor: none;
+  }
+ 
+  .world-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(212,168,67,0.08) 0%, transparent 60%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+ 
+  .world-card:hover { transform: translateY(-6px); border-color: rgba(212,168,67,0.4); background: rgba(255,255,255,0.07); }
+  .world-card:hover::before { opacity: 1; }
+ 
+  .card-icon {
+    font-size: 2.5rem;
+    margin-bottom: 1.2rem;
+    display: block;
+    animation: iconFloat 4s ease-in-out infinite;
+  }
+ 
+  @keyframes iconFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+ 
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    color: var(--warm-cream);
+    margin-bottom: 0.8rem;
+  }
+ 
+  .card-desc {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: rgba(250,244,232,0.65);
+    font-weight: 300;
+  }
+ 
+  .card-accent {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    border-radius: 0 0 16px 16px;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.4s ease;
+  }
+ 
+  .world-card:hover .card-accent { transform: scaleX(1); }
+ 
+  .quote-section {
+    padding: 5rem 2rem;
+    max-width: 700px;
+    margin: 0 auto;
+    text-align: center;
+  }
+ 
+  .quote-mark {
+    font-family: 'Playfair Display', serif;
+    font-size: 8rem;
+    line-height: 0.5;
+    color: var(--gold);
+    opacity: 0.2;
+    display: block;
+    margin-bottom: 1rem;
+  }
+ 
+  .quote-text {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    font-style: italic;
+    line-height: 1.6;
+    color: var(--warm-cream);
+    margin-bottom: 1.5rem;
+  }
+ 
+  .quote-source {
+    font-size: 0.9rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+  }
+ 
+  .vision-section {
+    padding: 4rem 2rem 6rem;
+    text-align: center;
+  }
+ 
+  .vision-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 4vw, 2.8rem);
+    color: var(--warm-cream);
+    margin-bottom: 1rem;
+  }
+ 
+  .vision-sub {
+    font-size: 1.1rem;
+    color: rgba(250,244,232,0.55);
+    margin-bottom: 3rem;
+    font-style: italic;
+  }
+ 
+  .ripple-canvas {
+    position: relative;
+    width: 340px;
+    height: 340px;
+    margin: 0 auto 3rem;
+    cursor: none;
+  }
+ 
+  .ripple-core {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 70px; height: 70px;
+    background: radial-gradient(circle, var(--gold), #8B5E1A);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    z-index: 2;
+    animation: coreGlow 3s ease-in-out infinite;
+  }
+ 
+  @keyframes coreGlow {
+    0%, 100% { box-shadow: 0 0 20px rgba(212,168,67,0.4), 0 0 60px rgba(212,168,67,0.15); }
+    50% { box-shadow: 0 0 40px rgba(212,168,67,0.7), 0 0 100px rgba(212,168,67,0.3); }
+  }
+ 
+  .ripple-ring {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid rgba(212,168,67,0.3);
+    animation: rippleExpand 4s ease-out infinite;
+  }
+ 
+  @keyframes rippleExpand {
+    0% { width: 70px; height: 70px; opacity: 0.8; }
+    100% { width: 340px; height: 340px; opacity: 0; }
+  }
+ 
+  .ripple-orbit {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: var(--r); height: var(--r);
+    margin-left: calc(var(--r) / -2);
+    margin-top: calc(var(--r) / -2);
+    border-radius: 50%;
+    border: 1px solid rgba(255,255,255,0.06);
+    animation: spinOrbit var(--speed) linear infinite;
+  }
+ 
+  @keyframes spinOrbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+ 
+  .orbit-node {
+    position: absolute;
+    top: -12px; left: 50%;
+    transform: translateX(-50%);
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--node-color);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    box-shadow: 0 0 12px var(--node-color);
+  }
+ 
+  .cta-section {
+    padding: 5rem 2rem 8rem;
+    text-align: center;
+    position: relative;
+  }
+ 
+  .cta-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    color: var(--warm-cream);
+    margin-bottom: 1rem;
+    line-height: 1.2;
+  }
+ 
+  .cta-title em { color: var(--gold); font-style: italic; }
+ 
+  .cta-body {
+    font-size: 1.15rem;
+    color: rgba(250,244,232,0.65);
+    max-width: 500px;
+    margin: 0 auto 3rem;
+    line-height: 1.7;
+  }
+ 
+  .cta-btn {
+    display: inline-block;
+    padding: 1rem 2.5rem;
+    border: 1px solid var(--gold);
+    border-radius: 50px;
+    color: var(--gold);
+    font-family: 'Crimson Pro', serif;
+    font-size: 1.1rem;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    cursor: none;
+    position: relative;
+    overflow: hidden;
+    transition: color 0.3s ease;
+    background: transparent;
+  }
+ 
+  .cta-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+    z-index: -1;
+  }
+ 
+  .cta-btn:hover { color: var(--deep-earth); }
+  .cta-btn:hover::before { transform: scaleX(1); }
+ 
+  /* Intention Modal */
+  .intention-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(9, 12, 65, 0.85);
+    z-index: 10000;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    backdrop-filter: blur(6px);
+  }
+ 
+  .intention-overlay.open { display: flex; }
+ 
+  .intention-modal {
+    background: #1d2653;
+    border: 1px solid rgba(212,168,67,0.3);
+    border-radius: 20px;
+    padding: 3rem 2.5rem;
+    max-width: 520px;
+    width: 100%;
+    text-align: center;
+    position: relative;
+    animation: modalIn 0.4s ease forwards;
+  }
+ 
+  @keyframes modalIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+ 
+  .intention-close {
+    position: absolute;
+    top: 1rem; right: 1.2rem;
+    background: none;
+    border: none;
+    color: rgba(250,244,232,0.4);
+    font-size: 1.8rem;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .intention-close:hover { color: var(--gold); }
+ 
+  .intention-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.7;
+    margin-bottom: 1rem;
+  }
+ 
+  .intention-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    color: var(--warm-cream);
+    margin-bottom: 0.75rem;
+    line-height: 1.3;
+  }
+ 
+  .intention-sub {
     font-size: 1.5rem;
     color: rgba(250,244,232,0.55);
     margin-bottom: 2rem;
@@ -766,4 +1656,4 @@
   });
 </script>
 </body>
-</html>
+</html> -->
